@@ -1,2 +1,78 @@
-# haptic-grammar
-A haptic design protocol for screenless AI hardware: pulse atoms, motifs, a text notation, and measured perceptual limits.
+# haptic-grammar · 触觉语法
+
+> 给没有屏幕的 AI 硬件设计排版学。
+> A haptic design protocol for screenless AI hardware.
+
+## 为什么
+
+AI 硬件正在集体去屏幕：眼镜、耳机、戒指、胸针。它们最重要的输出通道是**振动**，但没有人定义过它的语法——每个产品都在随机抖动。
+
+三个缺失：
+
+1. **没有书写系统**：振动无法被记录、review、diff
+2. **没有感知依据**：没人公开测过哪些节律人类真的分得清
+3. **没有语义映射**：随机编码 → 学习成本极高
+
+本项目要做的是**协议**，不是应用。
+
+## 三条硬约束
+
+| 约束 | 事实 | 后果 |
+| --- | --- | --- |
+| 平台 | iOS Safari 完全不支持 navigator.vibrate | 规范必须设备无关，iOS 走 Core Haptics |
+| 自由度 | Web 只能控制「开/关 + 时长」，无强度、无频率 | 只有两个维度：脉冲时长、间隔 |
+| 生理 | 马达启停延迟 10-25ms；短期记忆 4-7 个符号；带宽约几 bit/s | 最小时间单位 >= 20ms；不做字母表，做语义槽 |
+
+## 三层结构
+
+```
+L0 原子    S = 30ms   L = 90ms   gap = 60ms   word = 240ms
+L1 音节    SS  SL  LS  SLS  LSS ... (<= 8 个)
+L2 语义槽  谁 / 什么事 / 多急
+```
+
+自然映射（不靠记忆）：
+
+- 急促、密集 = 紧急
+- 缓慢、稀疏 = 可忽略
+- 连击 = 立即行动
+
+## 触谱 Tactile Score
+
+用纯文本写振动，可 diff、可 review、可版本化：
+
+```
+# 单位 ms   S=30  L=90  gap=60  word=240
+
+MOM_CALL  = L gap S gap L word L        # 慢而长 = 家人；结尾重音 = 呼叫
+WORK_MSG  = S gap S gap L word SS       # 快而碎 = 工作流
+CI_FAIL   = L gap L gap L word LLLL     # 连击 = 立刻处理
+BATTERY   = S gap L word S gap S        # 下沉感 = 状态
+```
+
+## 要测的东西
+
+规范里的每个数字都应该有数据支撑，而不是猜：
+
+1. **ABX 强制二选一** → 混淆矩阵
+2. **最小可辨集**：从 12 个 motif 递归剔除混淆率高的，收到 6-8 个
+3. **跨天学习曲线**：第 1/3/7 天各认对多少
+4. **部位迁移**：手 / 手腕 / 口袋 三个位置的识别率差
+
+目标产出：`data/confusion-matrix.json` + 一张「可辨性排行榜」。
+
+## 路线图
+
+- [x] v0.1 规范草案（本文件）+ 触谱记号
+- [ ] v0.2 单文件播放器（GitHub Pages）
+- [ ] v0.3 ABX 实验页 + 结果汇总
+- [ ] v0.4 最小可辨集 v1
+- [ ] v1.0 Android / iOS / watchOS 参考实现
+
+## 为什么值得做
+
+屏幕是过去二十年的默认输出。当硬件开始去掉屏幕，振动就是唯一的「字体」。现在定义它，成本最低。
+
+## 许可
+
+MIT (待定)
