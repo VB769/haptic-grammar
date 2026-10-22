@@ -3,6 +3,18 @@
 > 给没有屏幕的 AI 硬件设计排版学。
 > A haptic design protocol for screenless AI hardware.
 
+
+---
+
+## 立即体验（无需任何配置）
+
+- **在线试听**：[htmlpreview 预览](https://htmlpreview.github.io/?https://github.com/VB769/haptic-grammar/blob/main/index.html)
+  用 Android Chrome 打开，点任意 motif 就能感到振动。
+- **本地运行**：下载 [`index.html`](index.html) 用浏览器打开即可，完全离线。
+
+> GitHub Pages 尚未开启（需要在 Settings → Pages 手动选一次 `main` / root）。
+> 开启后的地址是 <https://vb769.github.io/haptic-grammar/>，届时可以删掉上面的预览链接。
+
 ## 为什么
 
 AI 硬件正在集体去屏幕：眼镜、耳机、戒指、胸针。它们最重要的输出通道是**振动**，但没有人定义过它的语法——每个产品都在随机抖动。
