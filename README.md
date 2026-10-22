@@ -54,6 +54,56 @@ BATTERY   = S gap L word S gap S        # 下沉感 = 状态
 
 规范里的每个数字都应该有数据支撑，而不是猜：
 
+
+---
+
+## v0.1 参考实现（单文件，可直接跑）
+
+复制下面这段存成 `index.html`，用 **Android Chrome** 打开就能听到四种 motif。iOS Safari 没有 Vibration API，只会显示提示。
+
+```html
+<!doctype html>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>触谱 · Tactile Score</title>
+<style>
+body{background:#0d1117;color:#e6edf3;font:16px system-ui;padding:20px;margin:0}
+button{display:block;width:100%;margin:10px 0;padding:18px;border-radius:12px;
+  border:1px solid #30363d;background:#161b22;color:#e6edf3;font-size:16px;text-align:left}
+small{display:block;color:#8b949e;margin-top:4px}
+</style>
+<h3>触谱 · Tactile Score</h3>
+<div id="b"></div>
+<p id="w" style="color:#f85149"></p>
+<script>
+const U = { S: 30, L: 90, gap: 60, word: 240 };
+const M = {
+  MOM_CALL: "L gap S gap L word L",
+  WORK_MSG: "S gap S gap L word S S",
+  CI_FAIL : "L gap L gap L word L L L L",
+  BATTERY : "S gap L word S gap S"
+};
+const p = s => s.split(" ").map(t => U[t]);
+if (!navigator.vibrate) w.textContent = "此浏览器不支持振动（iOS 需原生 Core Haptics 实现）";
+for (const k in M) {
+  const b = document.createElement("button");
+  b.innerHTML = k + "<small>" + M[k] + "</small>";
+  b.onclick = () => navigator.vibrate(p(M[k]));
+  document.getElementById("b").appendChild(b);
+}
+</script>
+```
+
+## 进度
+
+- [x] v0.1 规范草案 + 触谱记号
+- [x] v0.1 参考实现（上方代码，可直接复制运行）
+- [ ] v0.2 仓库内 `index.html` + GitHub Pages
+- [ ] v0.3 ABX 实验页 + 混淆矩阵汇总
+- [ ] v0.4 最小可辨集 v1（用实测数据砍到 6-8 个）
+- [ ] v1.0 Android / iOS / watchOS 参考实现
+
+> 完整版（播放 + ABX + 混淆矩阵导出，约 180 行）已在本机准备好，等 `index.html` 能被写入仓库后直接提交。
+
 1. **ABX 强制二选一** → 混淆矩阵
 2. **最小可辨集**：从 12 个 motif 递归剔除混淆率高的，收到 6-8 个
 3. **跨天学习曲线**：第 1/3/7 天各认对多少
